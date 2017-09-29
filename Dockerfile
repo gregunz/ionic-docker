@@ -18,7 +18,6 @@ RUN apt-get update &&  \
     apt-get update &&  \
     apt-get install -y nodejs && \
     npm install -g npm@"$NPM_VERSION" cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" yarn@"$YARN_VERSION" && \
-    npm cache clear && \
     gem install sass scss_lint && \
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     dpkg --unpack google-chrome-stable_current_amd64.deb && \
