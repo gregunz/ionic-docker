@@ -1,5 +1,5 @@
 FROM debian:jessie
-MAINTAINER contact [at] gregunz [dot] io
+LABEL maintainer="contact@gregunz.io"
 
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
