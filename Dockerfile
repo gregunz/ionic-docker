@@ -18,7 +18,7 @@ RUN apt-get update &&  \
     wget https://services.gradle.org/distributions/gradle-4.2-bin.zip && \
     mkdir /opt/gradle && \
     unzip -d /opt/gradle gradle-4.2-bin.zip && \
-    export PATH=\$PATH:/opt/gradle/gradle-4.2/bin && \
+    export PATH=$PATH:/opt/gradle/gradle-4.2/bin && \
     apt-get update &&  \
     apt-get install -y nodejs && \
     npm install -g npm@"$NPM_VERSION" cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" yarn@"$YARN_VERSION" && \
