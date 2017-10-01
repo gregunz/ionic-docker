@@ -27,9 +27,10 @@ RUN set -x \
         zip \
 
 # Install Gradle
-    && wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && wget --output-document=gradle-bin.zip https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && mkdir ${GRADLE_HOME} \
-    && unzip -d ${GRADLE_HOME} gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip -d ${GRADLE_HOME} gradle-bin.zip \
+    && ls ${GRADLE_HOME} \
     && ls ${GRADLE_HOME}/gradle-${GRADLE_VERSION} \
 
 # NODEJS
