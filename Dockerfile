@@ -23,6 +23,7 @@ RUN set -x \
         software-properties-common \
         unzip \
         wget \
+        zip \
 
 # NODEJS
 # Install nodejs
