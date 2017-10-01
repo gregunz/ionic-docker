@@ -50,6 +50,8 @@ RUN set -x \
 
 # Install Gradle
     && $SDKMAN_DIR/bin/sdk install gradle 4.2 \
+    && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    && sdk install gradle 4.2 \
 
 # Install chrome (for e2e test, headless use)
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
@@ -78,7 +80,7 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 # Install Android Tools
     && mkdir /opt/android-sdk-linux && cd /opt/android-sdk-linux \
-    && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/tools_r25.2.3-linux.zip \
+    && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
     && unzip -q android-tools-sdk.zip \
     && rm -f android-tools-sdk.zip \
     && chown -R root. /opt
@@ -87,7 +89,7 @@ RUN set -x \
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
 # Install Android SDK
-RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;25.0.2" "platforms;android-25" "platform-tools"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;26.0.1" "platforms;android-26" "platform-tools"
 RUN cordova telemetry off
 
 WORKDIR Sources
