@@ -78,7 +78,7 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 # Install Android Tools
     && mkdir /opt/android-sdk-linux && cd /opt/android-sdk-linux \
-    && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/tools_r25.2.3-linux.zip && \
+    && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/tools_r25.2.3-linux.zip \
     && unzip -q android-tools-sdk.zip \
     && rm -f android-tools-sdk.zip \
     && chown -R root. /opt
