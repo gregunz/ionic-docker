@@ -3,10 +3,11 @@ LABEL maintainer="gregunz <contact@gregunz.io>"
 
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
+    GRADLE_HOME=/opt/gradle \
+    GRADLE_VERSION=4.2 \
     NPM_VERSION=5.4.2 \
     IONIC_VERSION=3.12.0 \
     CORDOVA_VERSION=7.0.1 \
-    SDKMAN_DIR=/usr/local/sdkman \
     # Fix for the issue with Selenium, as described here:
     # https://github.com/SeleniumHQ/docker-selenium/issues/87
     DBUS_SESSION_BUS_ADDRESS=/dev/null
@@ -24,6 +25,12 @@ RUN set -x \
         unzip \
         wget \
         zip \
+
+# Install Gradle
+    && wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && mkdir ${GRADLE_HOME} \
+    && unzip -d ${GRADLE_HOME} gradle-${GRADLE_VERSION}-bin.zip \
+    && ls ${GRADLE_HOME}/gradle-${GRADLE_VERSION} \
 
 # NODEJS
 # Install nodejs
@@ -86,7 +93,7 @@ RUN set -x \
     && chown -R root. /opt
 
 # Setup environment
-ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${GRADLE_HOME}/gradle-${GRADLE_VERSION}/bin
 
 # Install Android SDK
 RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;26.0.1" "platforms;android-26" "platform-tools"
