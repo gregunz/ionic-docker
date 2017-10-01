@@ -63,7 +63,7 @@ RUN set -x \
 RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
 
 # Install Java8 (with use of python-software-properties to do add-apt-repository)
-RUN set -x
+RUN set -x \
     && add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" -y \
     && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
     && apt-get update && apt-get -y install \
