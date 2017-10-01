@@ -81,7 +81,7 @@ RUN set -x \
     && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
     && unzip -q android-tools-sdk.zip \
     && rm -f android-tools-sdk.zip \
-    && chown -R root. /opt \
+    && chown -R root. /opt
 
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
