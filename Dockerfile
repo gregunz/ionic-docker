@@ -12,26 +12,26 @@ ENV DEBIAN_FRONTEND=noninteractive \
     DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 # Install basics
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    git \
-    python-software-properties \
-    ruby \
-    ruby-dev \
-    software-properties-common \
-    unzip \
-    wget
+RUN set -x \
+    && apt-get update && apt-get install -y \
+        build-essential \
+        curl \
+        git \
+        python-software-properties \
+        ruby \
+        ruby-dev \
+        software-properties-common \
+        unzip \
+        wget \
 
 # NODEJS
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get update &&  apt-get install -y \
-        nodejs
+        nodejs \
 
 # IONIC & CORDOVA
 # Install depencies (npm, cordova, ionic, yarn, sass, scss_lint)
-RUN set -x \
     && npm install -g \
         npm@"$NPM_VERSION" \
         cordova@"$CORDOVA_VERSION" \
@@ -39,39 +39,36 @@ RUN set -x \
 
     && gem install \
         sass \
-        scss_lint
+        scss_lint \
 
 # Install SDKMAN
-RUN curl -s get.sdkman.io | bash \
+    && curl -s get.sdkman.io | bash \
     && set -x \
     && echo "sdkman_auto_answer=true" > $SDKMAN_DIR/etc/config \
     && echo "sdkman_auto_selfupdate=false" >> $SDKMAN_DIR/etc/config \
-    && echo "sdkman_insecure_ssl=false" >> $SDKMAN_DIR/etc/config
+    && echo "sdkman_insecure_ssl=false" >> $SDKMAN_DIR/etc/config \
 
 # Install Gradle
-RUN sdk install gradle 4.2
+    && sdk install gradle 4.2 \
 
 # Install chrome (for e2e test, headless use)
-RUN set -x \
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     && dpkg --unpack google-chrome-stable_current_amd64.deb \
     && apt-get install -f -y \
     && apt-get clean \
-    && rm google-chrome-stable_current_amd64.deb
+    && rm google-chrome-stable_current_amd64.deb \
 
 # Font libraries
-RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
+    && apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig \
 
 # Install Java8 (with use of python-software-properties to do add-apt-repository)
-RUN set -x \
     && add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" -y \
     && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
     && apt-get update && apt-get -y install \
-        oracle-java8-installer
+        oracle-java8-installer \
 
 # ANDROID
 # System libs for Android enviroment
-RUN set -x \
     && echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment \
     && dpkg --add-architecture i386 \
     && apt-get update \
@@ -84,7 +81,7 @@ RUN set -x \
     && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
     && unzip -q android-tools-sdk.zip \
     && rm -f android-tools-sdk.zip \
-    && chown -R root. /opt
+    && chown -R root. /opt \
 
 # Setup environment
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
