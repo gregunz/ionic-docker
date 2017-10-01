@@ -18,7 +18,6 @@ RUN set -x \
         build-essential \
         curl \
         git \
-        gradle \
         python-software-properties \
         ruby \
         ruby-dev \
