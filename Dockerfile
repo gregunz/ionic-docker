@@ -49,7 +49,8 @@ RUN set -x \
     && echo "sdkman_insecure_ssl=false" >> $SDKMAN_DIR/etc/config \
 
 # Install Gradle
-    && $SDKMAN_DIR/bin/sdk install gradle 4.2 \
+    && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    && sdk install gradle 4.2 \
 
 # Install chrome (for e2e test, headless use)
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
