@@ -27,9 +27,10 @@ RUN set -x \
         zip \
 
 # Install Gradle
-    && wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && wget --output-document=gradle-bin.zip https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && mkdir ${GRADLE_HOME} \
-    && unzip -d ${GRADLE_HOME} gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip -d ${GRADLE_HOME} gradle-bin.zip \
+    && ls ${GRADLE_HOME} \
     && ls ${GRADLE_HOME}/gradle-${GRADLE_VERSION} \
 
 # NODEJS
@@ -76,7 +77,7 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 # Install Android Tools
     && mkdir /opt/android-sdk-linux && cd /opt/android-sdk-linux \
-    && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
+    && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/tools_r25.2.3-linux.zip \
     && unzip -q android-tools-sdk.zip \
     && rm -f android-tools-sdk.zip \
     && chown -R root. /opt
@@ -85,7 +86,7 @@ RUN set -x \
 ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${GRADLE_HOME}/gradle-${GRADLE_VERSION}/bin
 
 # Install Android SDK
-RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;26.0.1" "platforms;android-26" "platform-tools"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;25.0.2" "platforms;android-25" "platform-tools"
 RUN cordova telemetry off
 
 WORKDIR Sources
