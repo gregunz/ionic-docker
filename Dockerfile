@@ -21,6 +21,7 @@ RUN set -x \
         ruby \
         ruby-dev \
         software-properties-common \
+        source \
         unzip \
         wget \
         zip \
