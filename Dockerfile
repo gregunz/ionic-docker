@@ -13,12 +13,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip ruby ruby-dev build-essential && \
+    apt-get install -y git wget curl unzip gradle ruby ruby-dev build-essential && \
     curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    wget https://services.gradle.org/distributions/gradle-4.2-bin.zip && \
-    mkdir /opt/gradle && \
-    unzip -d /opt/gradle gradle-4.2-bin.zip && \
-    export PATH=$PATH:/opt/gradle/gradle-4.2/bin && \
     apt-get update &&  \
     apt-get install -y nodejs && \
     npm install -g npm@"$NPM_VERSION" cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" yarn@"$YARN_VERSION" && \
