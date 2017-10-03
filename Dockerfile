@@ -10,6 +10,8 @@ FROM debian:jessie
 LABEL maintainer="gregunz <contact@gregunz.io>"
 
 ENV DEBIAN_FRONTEND=noninteractive \
+    TERM=xterm \
+    LANG=en_US.UTF-8 \
     ANDROID_HOME=/opt/android-sdk-linux \
     GRADLE_HOME=/opt/gradle \
     GRADLE_VERSION=4.2 \
