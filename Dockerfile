@@ -32,6 +32,28 @@ RUN set -x \
 # FONT LIBRARIES
 RUN xargs -a /tmp/requirements/font-libs.txt apt-get install -y
 
+# INSTALL NODEJS 6.X & NPM
+RUN set -x \
+    && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && npm install -g npm@"$NPM_VERSION"
+
+# INSTALL IONIC & CORDOVA
+RUN set -x \
+    && npm install -g \
+        cordova@"$CORDOVA_VERSION" \
+        ionic@"$IONIC_VERSION"
+
+# SET CORDOVA TELEMETRY TO OFF
+RUN cordova telemetry off
+
+# INSTALL SASS & SCSS_LINT
+RUN set -x \
+    && gem install \
+        sass \
+        scss_lint
+
 # INSTALL CHROME (for e2e test, headless use)
 RUN set -x \
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
@@ -57,28 +79,6 @@ RUN set -x \
 
 # ADD GRADLE TO PATH
 ENV PATH=${GRADLE_HOME}/gradle-${GRADLE_VERSION}/bin:${PATH}
-
-# INSTALL NODEJS 6.X
-RUN set -x \
-    && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get update &&  apt-get install -y \
-        nodejs
-
-# INSTALL NPM & IONIC & CORDOVA
-RUN set -x \
-    && npm install -g \
-        npm@"$NPM_VERSION" \
-        cordova@"$CORDOVA_VERSION" \
-        ionic@"$IONIC_VERSION"
-
-# SET CORDOVA TELEMETRY TO OFF
-RUN cordova telemetry off
-
-# INSTALL SASS & SCSS_LINT
-RUN set -x \
-    && gem install \
-        sass \
-        scss_lint
 
 # ANDROID
 # System libs for Android enviroment
