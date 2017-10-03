@@ -3,6 +3,7 @@
 #
 # DEPENDENCIES (to reuse this Dockerfile):
 # - apt-packages.txt at /requirements
+# - font-libs.txt at /requirements
 
 FROM debian:jessie
 
