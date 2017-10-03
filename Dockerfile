@@ -27,8 +27,7 @@ RUN set -x \
     && xargs -a /tmp/requirements/apt-packages.txt apt-get install -y
 
 # FONT LIBRARIES
-RUN set -x \
-    && apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
+RUN xargs -a /tmp/requirements/font-libs.txt apt-get install -y
 
 # INSTALL CHROME (for e2e test, headless use)
 RUN set -x \
