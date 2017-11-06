@@ -1,3 +1,10 @@
+# IONIC DOCKER
+# perfect envirronment to build your latest ionic app on android with the latest SDK
+#
+# DEPENDENCIES (to reuse this Dockerfile):
+# - apt-packages.txt at /requirements
+# - font-libs.txt at /requirements
+
 FROM debian:jessie
 
 LABEL maintainer="gregunz <contact@gregunz.io>"
