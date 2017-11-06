@@ -1,7 +1,10 @@
 FROM debian:jessie
+
 LABEL maintainer="gregunz <contact@gregunz.io>"
 
 ENV DEBIAN_FRONTEND=noninteractive \
+    TERM=xterm \
+    LANG=en_US.UTF-8 \
     ANDROID_HOME=/opt/android-sdk-linux \
     GRADLE_HOME=/opt/gradle \
     GRADLE_VERSION=4.2 \
@@ -12,62 +15,67 @@ ENV DEBIAN_FRONTEND=noninteractive \
     # https://github.com/SeleniumHQ/docker-selenium/issues/87
     DBUS_SESSION_BUS_ADDRESS=/dev/null
 
-# Install basics
+ADD /requirements /tmp/requirements
+
+# INSTALL REQUIREMENTS
 RUN set -x \
-    && apt-get update && apt-get install -y \
-        build-essential \
-        curl \
-        git \
-        python-software-properties \
-        ruby \
-        ruby-dev \
-        software-properties-common \
-        unzip \
-        wget \
-        zip \
+    && apt-get update -y \
+    && xargs -a /tmp/requirements/apt-packages.txt apt-get install -y
 
-# Install Gradle
-    && wget --output-document=gradle-bin.zip https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
-    && mkdir ${GRADLE_HOME} \
-    && unzip -d ${GRADLE_HOME} gradle-bin.zip \
-    && ls ${GRADLE_HOME} \
-    && ls ${GRADLE_HOME}/gradle-${GRADLE_VERSION} \
+# FONT LIBRARIES
+RUN xargs -a /tmp/requirements/font-libs.txt apt-get install -y
 
-# NODEJS
-# Install nodejs
+# INSTALL NODEJS 6.X & NPM
+RUN set -x \
     && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get update &&  apt-get install -y \
-        nodejs \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && npm install -g npm@"$NPM_VERSION"
 
-# IONIC & CORDOVA
-# Install depencies (npm, cordova, ionic, yarn, sass, scss_lint)
+# INSTALL IONIC & CORDOVA
+RUN set -x \
     && npm install -g \
-        npm@"$NPM_VERSION" \
         cordova@"$CORDOVA_VERSION" \
-        ionic@"$IONIC_VERSION" \
+        ionic@"$IONIC_VERSION"
 
+# SET CORDOVA TELEMETRY TO OFF
+RUN cordova telemetry off
+
+# INSTALL SASS & SCSS_LINT
+RUN set -x \
     && gem install \
         sass \
-        scss_lint \
+        scss_lint
 
-# Install chrome (for e2e test, headless use)
+# INSTALL CHROME (for e2e test, headless use)
+RUN set -x \
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     && dpkg --unpack google-chrome-stable_current_amd64.deb \
     && apt-get install -f -y \
     && apt-get clean \
-    && rm google-chrome-stable_current_amd64.deb \
+    && rm google-chrome-stable_current_amd64.deb
 
-# Font libraries
-    && apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig \
-
-# Install Java8 (with use of python-software-properties to do add-apt-repository)
+# INSTALL JAVA8 (with use of python-software-properties and hence add-apt-repository)
+RUN set -x \
     && add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" -y \
     && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
     && apt-get update && apt-get -y install \
-        oracle-java8-installer \
+        oracle-java8-installer
+
+# INSTALL GRADLE
+RUN set -x \
+    && wget --output-document=gradle-bin.zip https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && mkdir ${GRADLE_HOME} \
+    && unzip -d ${GRADLE_HOME} gradle-bin.zip \
+    && ls ${GRADLE_HOME} \
+    && ls ${GRADLE_HOME}/gradle-${GRADLE_VERSION}
+
+# ADD GRADLE TO PATH
+ENV PATH=${GRADLE_HOME}/gradle-${GRADLE_VERSION}/bin:${PATH}
 
 # ANDROID
 # System libs for Android enviroment
+RUN set -x \
     && echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment \
     && dpkg --add-architecture i386 \
     && apt-get update \
@@ -75,20 +83,21 @@ RUN set -x \
     && apt-get clean \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-# Install Android Tools
+# Android Tools
     && mkdir /opt/android-sdk-linux && cd /opt/android-sdk-linux \
     && wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
     && unzip -q android-tools-sdk.zip \
     && rm -f android-tools-sdk.zip \
     && chown -R root. /opt
 
-# Setup environment
-ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${GRADLE_HOME}/gradle-${GRADLE_VERSION}/bin
+# ADD ANDROID TO PATH
+ENV PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools::${PATH}
 
-# Install Android SDK
+# INSTALL ANDROID SDK
 RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;26.0.1" "platforms;android-26" "platform-tools"
-RUN cordova telemetry off
 
-WORKDIR Sources
+WORKDIR /build
+
 EXPOSE 8100 35729
-CMD ["ionic", "serve"]
+
+CMD ["/bin/bash"]
