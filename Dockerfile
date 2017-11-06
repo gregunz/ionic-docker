@@ -15,8 +15,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
     GRADLE_HOME=/opt/gradle \
     GRADLE_VERSION=4.2 \
-    NPM_VERSION=5.4.2 \
-    IONIC_VERSION=3.12.0 \
+    NPM_VERSION=5.5.1 \
+    IONIC_VERSION=3.16.0 \
     CORDOVA_VERSION=7.0.1 \
     # Fix for the issue with Selenium, as described here:
     # https://github.com/SeleniumHQ/docker-selenium/issues/87
