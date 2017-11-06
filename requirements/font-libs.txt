@@ -1,7 +1,0 @@
-fonts-ipafont-gothic
-libfontconfig
-libfreetype6
-xfonts-100dpi
-xfonts-75dpi
-xfonts-cyrillic
-xfonts-scalable
